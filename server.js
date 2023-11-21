@@ -6,7 +6,7 @@ var cors = require("cors");
 const PORT = process.env.PORT || 8000;
 
 //Connect to MongoDB
-const dbURI = "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/test";
+const dbURI = "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/database";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => console.log("Connected to database"))
   .catch((err) => {

@@ -1,16 +1,18 @@
 // routes/reservation.js
 const { response } = require("express")
-var express = require("express")
-var router = express.Router()
-const Day = require("../models/Day").model
-const Table = require("../models/Table").model
+const express = require("express");
+const router = express.Router();
+const Day = require("../models/Day");
+
+const Table = require("../models/Table");
 const Reservation = require("../models/Reservation").model
 const isHighTrafficDay = require("../controllers/isHighTrafficDay")
 const User = require("../models/User")
 const Restaurant = require("../models/Restaurant");
 router.use(express.json())
 
-/*
+/*const Day = require("../models/Day").model;
+
 Input:
   1.Take in an array of available table(s) to reserve
   2.Customer information

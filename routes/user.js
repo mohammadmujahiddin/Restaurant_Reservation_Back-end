@@ -1,5 +1,4 @@
 const express = require("express")
-const mongoose = require("mongoose")
 const router = express.Router()
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
@@ -25,13 +24,12 @@ router.post("/register", async (req, res) => {
             await user.save()
             res.send("Successfully registered " + user.firstName)
         } else {
-            res.status(409).json({ message: "Phone number found, please login." });
-          }
+            res.send("Phone number found, please login.")
+        }
 
     } catch (error) {
-        console.error("Error adding user", error);
-        res.status(500).json({ error: "Internal Server Error" });
-      }
+        console.log("Error adding user", error)
+    }
 })
 
 //Login page

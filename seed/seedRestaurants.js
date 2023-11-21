@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('your-mongodb-uri', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/database', { useNewUrlParser: true, useUnifiedTopology: true });
 require('dotenv').config();
 
-const Restaurant = require('./models/Restaurant'); // Adjust the path as needed
+const Restaurant = require('../models/Restaurant'); // Adjust the path as needed
 
 const restaurantsData = [
   { name: "Restaurant A" },
