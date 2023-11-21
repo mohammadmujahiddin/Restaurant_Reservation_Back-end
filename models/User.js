@@ -1,10 +1,16 @@
 const mongoose = require("mongoose");
 
+const bcrypt = require('bcrypt');
+
+// ... (other imports and schema definition)
+
+
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true
-    },
+        required: true,
+        trim: true,
+      },      
     lastName: {
         type: String,
         required: true
@@ -36,9 +42,10 @@ const userSchema = new mongoose.Schema({
     },
     preferPayment: {
         type: String,
-        enum : ['Credit','Cash', 'Check'],
-        default: 'Credit'
-    },
+        enum: ['CREDIT', 'CASH', 'CHECK'],
+        default: 'CREDIT',
+      },
+      
     creditCard: {
         cardNumber: {
             type: String,
@@ -56,4 +63,19 @@ const userSchema = new mongoose.Schema({
 
 });
 
+userSchema.pre('save', async function (next) {
+    const user = this;
+    if (!user.isModified('password')) return next();
+  
+    try {
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      user.password = hashedPassword;
+      next();
+    } catch (error) {
+      return next(error);
+    }
+  });
+  
+
 module.exports = mongoose.model('User', userSchema);
+
