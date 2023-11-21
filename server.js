@@ -3,13 +3,16 @@ const app = express();
 const mongoose = require("mongoose");
 var cors = require("cors");
 
-const PORT = 8000
+const PORT = process.env.PORT || 8000;
 
 //Connect to MongoDB
-const dbURI = "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/";
+const dbURI = "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/test";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then((result) => console.log("Connected to database"))
-    .catch((err) => console.log(err));
+  .then((result) => console.log("Connected to database"))
+  .catch((err) => {
+    console.error("Error connecting to database:", err);
+  });
+
 
 // CORS Config
 app.use(cors());
@@ -21,3 +24,7 @@ app.use('/restaurants', require('./routes/restaurant'));
 app.listen(PORT, () =>{
     console.log(`Server running on port ${PORT}`);
 });
+app.use((req, res, next) => {
+    res.status(404).json({ error: 'Not Found' });
+  });
+  

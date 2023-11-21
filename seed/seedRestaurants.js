@@ -1,4 +1,8 @@
-const Restaurant = require("./models/Restaurant"); // Adjust the path as needed
+const mongoose = require('mongoose');
+mongoose.connect('your-mongodb-uri', { useNewUrlParser: true, useUnifiedTopology: true });
+require('dotenv').config();
+
+const Restaurant = require('./models/Restaurant'); // Adjust the path as needed
 
 const restaurantsData = [
   { name: "Restaurant A" },
@@ -8,13 +12,14 @@ const restaurantsData = [
 
 async function seedRestaurants() {
   try {
-    await Restaurant.deleteMany(); // Clear existing data
+    await Restaurant.deleteMany();
     await Restaurant.insertMany(restaurantsData);
     console.log("Restaurants seeded successfully");
   } catch (error) {
     console.error("Error seeding restaurants:", error);
+  } finally {
+    mongoose.connection.close();
   }
 }
 
-// Call the function to seed restaurants
 seedRestaurants();

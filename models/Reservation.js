@@ -1,17 +1,26 @@
 const mongoose = require("mongoose");
 
 let reservationSchema = new mongoose.Schema({
-    firstName: String,
+    firstName: {
+        type: String,
+        default: "Unknown",
+      },
+      
+      
     lastName: String,
     phoneNumber: String,
     creditCard: {
-        cardNumber: String,
-        expDate: String,
-        cvv: String
-        }                 
+        type: {
+          cardNumber: String,
+          expDate: String,
+          cvv: String,
+        },
+        required: true,
+      },
+                      
     });
 
-let Reservation = mongoose.model("Reservation", reservationSchema);
-
-module.exports.model = Reservation;
-module.exports.schema = reservationSchema;
+    let ReservationModel = mongoose.model("Reservation", reservationSchema);
+    module.exports.model = ReservationModel;
+    module.exports.schema = reservationSchema;
+    module.exports = ReservationModel;

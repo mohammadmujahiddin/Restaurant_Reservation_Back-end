@@ -1,25 +1,33 @@
+// seed/generateTable.js
 const mongoose = require('mongoose');
-const Table = require('../models/Table').model;
+const Table = require('../models/Table');
 
 //Connect to MongoDB
-const dbURI = "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/";
+const dbURI = process.env.MONGODB_URI || "mongodb+srv://mohammadmujahiddin01:mujju123@database.ui1abg3.mongodb.net/test";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => console.log("Connected to database"))
     .catch((err) => console.log(err));
 
 
-const seedDB = async () => {
-  await Table.deleteMany({});
-  for (let i = 1; i < 3; i++) {
-    const table = new Table({
-      name: `Table ${i}`,
-      capacity: 2,
-      isAvailable: true
-    })
-    await table.save();
-  }
-  for (let i = 3; i < 6; i++) {
-    const table = new Table({
+    const seedTables = async () => {
+      try {
+    await Table.deleteMany({});
+    await mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("Connected to database");
+  
+    // Rest of the code
+  
+    
+    for (let i = 1; i < 3; i++) {
+      const table = new Table({
+        name: `Table ${i}`,
+        capacity: 2,
+        isAvailable: true
+      })
+      await table.save();
+    }
+    for (let i = 3; i < 6; i++) {
+      const table = new Table({
       name: `Table ${i}`,
       capacity: 4,
       isAvailable: true
@@ -34,8 +42,20 @@ const seedDB = async () => {
     })
     await table.save();
   }
-};
+  console.log("Tables seeded successfully");
 
-seedDB().then(() => {
+} catch (error) {
+  console.error("Error connecting to the database:", error);
+}finally {
+  mongoose.connection.close();
+}
+};
+seedTables();
+setTimeout(() => {
+  mongoose.connection.close();
+}, 1000);
+
+
+seedTables().then(() => {
   mongoose.connection.close();
 })

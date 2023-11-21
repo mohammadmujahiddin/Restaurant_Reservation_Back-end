@@ -25,12 +25,13 @@ router.post("/register", async (req, res) => {
             await user.save()
             res.send("Successfully registered " + user.firstName)
         } else {
-            res.send("Phone number found, please login.")
-        }
+            res.status(409).json({ message: "Phone number found, please login." });
+          }
 
     } catch (error) {
-        console.log("Error adding user", error)
-    }
+        console.error("Error adding user", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
 })
 
 //Login page

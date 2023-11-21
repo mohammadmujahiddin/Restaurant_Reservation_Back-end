@@ -12,7 +12,14 @@ const restaurantsData = [
 
 // Define a route to handle GET requests to /restaurants
 router.get('/', (req, res) => {
-  res.json(restaurantsData); // Return the restaurant data as JSON
+  try {
+    // Attempt to retrieve and return restaurant data
+    res.json(restaurantsData);
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 module.exports = router;

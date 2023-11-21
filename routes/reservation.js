@@ -1,3 +1,4 @@
+// routes/reservation.js
 const { response } = require("express")
 var express = require("express")
 var router = express.Router()
@@ -35,8 +36,8 @@ router.post("/confirm", async (req, res) => {
       const restaurants = await Restaurant.find();
       res.json(restaurants);
     } catch (error) {
-      console.error("Error fetching restaurants:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error occurred while confirming guest reservation:", error);
+      res.status(500).send("Internal Server Error");
     }
   });
   // create reservation
@@ -70,7 +71,7 @@ router.post("/confirm", async (req, res) => {
     if (isHighTrafficDay(dateTime)){
       res.status(200).send("Reservation falls within weekend/holiday. $10 holding fee applied")
     }else{
-      res.status(200).send("Confirmed Booking")}
+      res.status(200).json({ message: "Confirmed Booking" });}
     
   } catch (error) {
     res.status(500).send("Error occured while confirming guest reservation")
@@ -85,7 +86,7 @@ router.get("/confirm/:phone", async (req, res) => {
   // get information for autofill
   let phoneNumber = req.params.phone
   const user = await User.findOne({ phoneNumber })
-  res.status(200).send(user)
+  res.status(200).json(user);
 })
 
 //http://localhost:8000/reservation/availability
@@ -103,7 +104,7 @@ router.post("/availability", async (req, res) => {
     const isExist = await Day.findOne({ date: dateTime })
     if (isExist !== null) {
       let selectedTable = pickTable(isExist.tables, partySize)
-      res.status(200).send(selectedTable)
+      res.status(200).json(selectedTable);
     } else {
       const allTables = await Table.find({});
       const day = new Day({
@@ -113,10 +114,11 @@ router.post("/availability", async (req, res) => {
       await day.save()
       console.log("First reservion for instance: ", dateTime)
       const selectedTable = await pickTable(allTables, partySize)
-      res.status(200).send(selectedTable)
+      res.status(200).json(selectedTable);
     }
   } catch (error) {
-    res.status(500).send("Error looking for table")
+    console.error("Error occurred while looking for table availability:", error);
+    res.status(500).send("Internal Server Error");
   }
 
 });
