@@ -63,6 +63,7 @@ router.post("/confirm", async (req, res) => {
           console.log("Reserved ", availableTable.name, "on: ", dateTime)
           table.isAvailable = false
           table.reservation = reservation
+          
         }
       }
     }
@@ -71,9 +72,10 @@ router.post("/confirm", async (req, res) => {
     await reservation.save()
 
     if (isHighTrafficDay(dateTime)){
-      res.status(200).send("Reservation falls within weekend/holiday. $10 holding fee applied")
+      res.status(200).send("Reservation falls within weekend/holiday. Rs.100 holding fee applied")
     }else{
-      res.status(200).json({ message: "Confirmed Booking" });}
+      res.status(200).send("Reservation confirmed")
+    }
     
   } catch (error) {
     res.status(500).send("Error occured while confirming guest reservation")
